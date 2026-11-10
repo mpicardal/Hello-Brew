@@ -1,0 +1,5 @@
+.env
+public/uploads/*
+!public/uploads/.htaccess
+.vscode/*
+!.vscode/extensions.json

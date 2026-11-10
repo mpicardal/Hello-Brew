@@ -1,0 +1,7 @@
+Options -Indexes
+<IfModule mod_headers.c>
+  Header always unset X-Powered-By
+</IfModule>
+<FilesMatch "\.(env|sql|md|log|ini)$">
+  Require all denied
+</FilesMatch>

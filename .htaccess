@@ -1,0 +1,8 @@
+# If the whole project folder is inside htdocs, only /public may be reached.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(?!public/) - [F,L]
+</IfModule>
+<IfModule !mod_rewrite.c>
+  Require all denied
+</IfModule>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+<rect width="600" height="600" fill="#f6e8d2"/>
+<circle cx="300" cy="310" r="235" fill="#ecd6b6"/>
+<circle cx="300" cy="310" r="235" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="2 14"/>
+
+<ellipse cx="300" cy="455" rx="215" ry="50" fill="#000" opacity=".08"/>
+<ellipse cx="300" cy="380" rx="215" ry="95" fill="#fff"/>
+<ellipse cx="300" cy="380" rx="160" ry="66" fill="#f4efe8"/>
+
+<rect x="165" y="380" width="270" height="34" rx="10" fill="#e9c48a" stroke="#c78f4d" stroke-width="6"/>
+<rect x="158" y="330" width="284" height="14" rx="7.0" fill="#9ccc65"/><rect x="158" y="342" width="284" height="14" rx="7.0" fill="#f6cf4a"/><rect x="158" y="354" width="284" height="18" rx="9.0" fill="#f0a3a3"/><rect x="158" y="370" width="284" height="12" rx="6.0" fill="#fff8ea"/>
+<path d="M165 332 L300 205 L435 332 Z" fill="#f6e2bb" stroke="#c78f4d" stroke-width="12" stroke-linejoin="round"/>
+<path d="M205 312 L300 225 L395 312" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="8" stroke-linejoin="round"/>
+</svg>

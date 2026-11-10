@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+<rect width="600" height="600" fill="#f6e8d2"/>
+<circle cx="300" cy="310" r="235" fill="#ecd6b6"/>
+<circle cx="300" cy="310" r="235" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="2 14"/>
+
+<ellipse cx="300" cy="455" rx="190" ry="40" fill="#000" opacity=".08"/>
+<ellipse cx="300" cy="440" rx="180" ry="42" fill="#ffffff" stroke="#1b120c" stroke-opacity=".12" stroke-width="3"/>
+<ellipse cx="300" cy="432" rx="120" ry="22" fill="#000" opacity=".06"/>
+<path d="M410 300 a55 55 0 0 1 0 100" fill="none" stroke="#ffffff" stroke-width="26"/>
+<path d="M410 300 a55 55 0 0 1 0 100" fill="none" stroke="#1b120c" stroke-opacity=".1" stroke-width="3"/>
+<path d="M180 300 h240 l-22 110 a40 40 0 0 1 -40 32 h-116 a40 40 0 0 1 -40 -32z" fill="#ffffff" stroke="#1b120c" stroke-opacity=".12" stroke-width="3"/>
+<ellipse cx="300" cy="300" rx="120" ry="34" fill="#ffffff" stroke="#1b120c" stroke-opacity=".12" stroke-width="3"/>
+<ellipse cx="300" cy="304" rx="106" ry="26" fill="#6a3418"/>
+<clipPath id="c"><ellipse cx="300" cy="304" rx="106" ry="26"/></clipPath>
+<g clip-path="url(#c)" transform="translate(0 0) scale(1 1)"><g transform="translate(300 304) scale(1 .33) translate(-300 -304)"><circle cx="270" cy="300" r="5" fill="#5a3418" opacity=".55"/><circle cx="320" cy="290" r="4" fill="#5a3418" opacity=".55"/><circle cx="300" cy="320" r="6" fill="#5a3418" opacity=".55"/><circle cx="340" cy="316" r="4" fill="#5a3418" opacity=".55"/><circle cx="255" cy="325" r="3" fill="#5a3418" opacity=".55"/><circle cx="288" cy="282" r="3" fill="#5a3418" opacity=".55"/><circle cx="330" cy="338" r="5" fill="#5a3418" opacity=".55"/><circle cx="275" cy="342" r="4" fill="#5a3418" opacity=".55"/></g></g>
+<g fill="#fff"><rect x="250" y="268" width="26" height="22" rx="6"/><rect x="314" y="262" width="24" height="22" rx="6"/></g>
+<path d="M260 170 c-18 -22 18 -38 0 -62 c-14 -18 10 -30 0 -46" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".85"/><path d="M300 170 c-18 -22 18 -38 0 -62 c-14 -18 10 -30 0 -46" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".85"/><path d="M340 170 c-18 -22 18 -38 0 -62 c-14 -18 10 -30 0 -46" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+</svg>

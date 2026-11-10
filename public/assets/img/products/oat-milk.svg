@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+<rect width="600" height="600" fill="#f6e8d2"/>
+<circle cx="300" cy="310" r="235" fill="#ecd6b6"/>
+<circle cx="300" cy="310" r="235" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="2 14"/>
+
+<ellipse cx="300" cy="495" rx="110" ry="18" fill="#000" opacity=".08"/>
+<path d="M240 200 h120 v40 l30 50 v190 a18 18 0 0 1 -18 18 h-144 a18 18 0 0 1 -18 -18 v-190 l30 -50z" fill="#efe1c6" stroke="#1b120c" stroke-opacity=".12" stroke-width="3"/>
+<rect x="236" y="160" width="128" height="46" rx="10" fill="#b5735a"/>
+<rect x="225" y="320" width="150" height="110" rx="14" fill="#fff"/>
+<text x="300" y="368" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#1b120c">OAT</text>
+<text x="300" y="402" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#6b5545">add-on</text>
+</svg>
