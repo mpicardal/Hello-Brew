@@ -12,9 +12,17 @@ foreach (q_all("SELECT status, COUNT(*) n FROM orders GROUP BY status") as $r) {
     $queue[$r['status']] = (int) $r['n'];
 }
 
-$analytics = can('analytics');
+$analytics = can('analytics');   // money: admin only
+$insights = can('insights');     // units and searches: admin + staff
+$valid = "o.status NOT IN ('cancelled') AND o.created_at >= ?";
+if ($insights) {
+    $top = q_all("SELECT oi.product_name label, SUM(oi.qty) qty, SUM(oi.line_total) rev
+                  FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE $valid
+                  GROUP BY oi.product_name ORDER BY qty DESC LIMIT 6", [$from]);
+    $searches = q_all("SELECT SUBSTRING(meta,3) term, COUNT(*) n FROM analytics_events WHERE event='search' AND created_at >= ?
+                       GROUP BY meta ORDER BY n DESC LIMIT 6", [$from]);
+}
 if ($analytics) {
-    $valid = "o.status NOT IN ('cancelled') AND o.created_at >= ?";
     $k = q_one("SELECT COUNT(*) orders, COALESCE(SUM(total),0) gross, COALESCE(AVG(total),0) aov,
                        COUNT(DISTINCT user_id) buyers FROM orders o WHERE $valid", [$from]);
     $refunds = (float) q_val("SELECT COALESCE(SUM(amount),0) FROM payments WHERE kind='refund' AND created_at >= ?", [$from]);
@@ -30,9 +38,6 @@ if ($analytics) {
     }
     $dayLabels = array_map(fn($d) => date('M j', strtotime($d)), array_keys($byDay));
 
-    $top = q_all("SELECT oi.product_name label, SUM(oi.qty) qty, SUM(oi.line_total) rev
-                  FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE $valid
-                  GROUP BY oi.product_name ORDER BY qty DESC LIMIT 6", [$from]);
     $byCat = q_all("SELECT c.name label, SUM(oi.line_total) value FROM order_items oi
                     JOIN orders o ON o.id=oi.order_id JOIN products p ON p.id=oi.product_id JOIN categories c ON c.id=p.category_id
                     WHERE $valid GROUP BY c.name ORDER BY value DESC", [$from]);
@@ -53,8 +58,6 @@ if ($analytics) {
     $checkouts = $funnel['begin_checkout']['value'];
     $checkoutAbandon = $checkouts ? (1 - min($checkouts, $funnel['purchase']['value']) / $checkouts) * 100 : 0;
 
-    $searches = q_all("SELECT SUBSTRING(meta,3) term, COUNT(*) n FROM analytics_events WHERE event='search' AND created_at >= ?
-                       GROUP BY meta ORDER BY n DESC LIMIT 6", [$from]);
 }
 $lowStock = can('products') ? q_all('SELECT id, name, stock FROM products WHERE is_archived=0 AND stock <= ? ORDER BY stock, name LIMIT 10', [LOW_STOCK_THRESHOLD]) : [];
 $recent = q_all('SELECT id, order_no, billing_name, total, status, created_at FROM orders ORDER BY created_at DESC LIMIT 6');
@@ -65,12 +68,12 @@ require ROOT . '/includes/layout/admin_header.php';
 ?>
 <div class="admin-head">
   <h1>Dashboard</h1>
-  <?php if ($analytics): ?>
+  <?php if ($insights): ?>
     <div class="btn-row">
       <nav class="seg" aria-label="Date range">
         <?php foreach ([7, 30, 90] as $r): ?><a href="?range=<?= $r ?>"<?= $range === $r ? ' aria-current="page"' : '' ?>><?= $r ?> days</a><?php endforeach; ?>
       </nav>
-      <a class="btn btn-tan btn-sm" href="<?= url('admin/export.php?range=' . $range) ?>">Export CSV</a>
+      <?php if ($analytics): ?><a class="btn btn-tan btn-sm" href="<?= url('admin/export.php?range=' . $range) ?>">Export CSV</a><?php endif; ?>
     </div>
   <?php endif; ?>
 </div>
@@ -108,15 +111,22 @@ require ROOT . '/includes/layout/admin_header.php';
       </div>
     </div>
     <div class="panel">
-      <h3>Top products (units sold)</h3>
-      <?php if ($top): ?>
-        <?= hbar_chart(array_map(fn($t) => ['label' => $t['label'], 'value' => (float) $t['qty'], 'display' => (int) $t['qty'] . ' · ' . money($t['rev'])], $top), 'Top products') ?>
-      <?php else: ?><p class="muted">No sales in this period yet.</p><?php endif; ?>
-    </div>
-    <div class="panel">
       <h3>Sales by category</h3>
       <?php if ($byCat): ?>
         <?= hbar_chart(array_map(fn($c) => ['label' => $c['label'], 'value' => (float) $c['value'], 'display' => money($c['value'])], $byCat), 'Sales by category') ?>
+      <?php else: ?><p class="muted">No sales in this period yet.</p><?php endif; ?>
+    </div>
+  </div>
+<?php endif; ?>
+
+<?php if ($insights): ?>
+  <h2 class="admin-sub">Best-sellers · last <?= $range ?> days</h2>
+  <div class="panel-grid">
+    <div class="panel">
+      <h3>Top products (units sold)</h3>
+      <?php if ($top): ?>
+        <?= hbar_chart(array_map(fn($t) => ['label' => $t['label'], 'value' => (float) $t['qty'],
+              'display' => (int) $t['qty'] . ($analytics ? ' · ' . money($t['rev']) : ' sold')], $top), 'Top products') ?>
       <?php else: ?><p class="muted">No sales in this period yet.</p><?php endif; ?>
     </div>
     <div class="panel">

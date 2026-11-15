@@ -27,10 +27,12 @@ Test cards (no real money): `4242 4242 4242 4242` succeeds, `4000 0000 0000 0002
 | Role | Where | Can do |
 |---|---|---|
 | Customer | Store + My account | Browse, search, filter, cart, checkout, order history and tracking, cancel/return requests, reviews, saved addresses |
-| Admin | /admin | Everything, including refunds, coupons, staff accounts, email log, audit log |
-| Staff | /admin | Products, stock, categories, orders, returns (approve/reject), customers, reviews, analytics |
-| Fulfillment | /admin | Order queue, status updates, courier assignment. Customer emails are masked |
-| Courier | /courier | Only orders assigned to them: address, phone, notes and cash to collect. No emails |
+| Admin | /admin | Everything, including sales and revenue analytics, CSV export, refunds, coupons, staff accounts, email log, audit log |
+| Staff | /admin | Products, stock, categories, orders, returns (approve/reject), customers, reviews, best-sellers by units. No sales, revenue or refund totals |
+| Fulfillment | /admin | Order queue, status updates up to packed, courier assignment. Customer emails are masked |
+| Courier | /courier | Only orders assigned to them: marks pickup and delivery; sees address, phone, notes and cash to collect. No emails |
+
+Delivered, cancelled and returned orders are closed: their status can't be changed again.
 
 Public sign-up only creates customers. Staff accounts are created by an admin. Every page checks the role on the server.
 

@@ -46,11 +46,12 @@
     start();
   }
 
-  // Category scroller arrows
+  // Category row: on small screens, bring the selected category into view
   const scroller = $('[data-scroller]');
-  $$('[data-scroll]').forEach(b => b.addEventListener('click', () => {
-    if (scroller) scroller.scrollBy({ left: +b.dataset.scroll * scroller.clientWidth * 0.8, behavior: 'smooth' });
-  }));
+  const activeCat = scroller && $('.cat-card.is-active', scroller);
+  if (activeCat && scroller.scrollWidth > scroller.clientWidth) {
+    scroller.scrollLeft = activeCat.offsetLeft - scroller.offsetLeft - 16;
+  }
 
   // Offer countdown
   const cd = $('[data-deadline]');

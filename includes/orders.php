@@ -10,9 +10,15 @@ const ORDER_FLOW = [
     'out_for_delivery' => ['delivered'],
 ];
 
-function set_order_status(int $orderId, string $new, string $note = ''): void
+/** Orders in these states are finished; only a delivered order can still become "returned". */
+const CLOSED_STATUSES = ['delivered', 'cancelled', 'returned'];
+
+function set_order_status(int $orderId, string $new, string $note = ''): bool
 {
     $o = q_one('SELECT * FROM orders WHERE id = ?', [$orderId]);
+    if (!$o || (in_array($o['status'], CLOSED_STATUSES, true) && !($o['status'] === 'delivered' && $new === 'returned'))) {
+        return false;   // closed orders can't move back to preparing, packed, etc.
+    }
     q('UPDATE orders SET status = ? WHERE id = ?', [$new, $orderId]);
     q('INSERT INTO order_status_history (order_id, status, note, changed_by) VALUES (?,?,?,?)',
         [$orderId, $new, $note !== '' ? mb_substr($note, 0, 255) : null, current_user()['id'] ?? null]);
@@ -29,6 +35,7 @@ function set_order_status(int $orderId, string $new, string $note = ''): void
     };
     email_order_event($orderId, 'status', $extra);
     audit('order_status', "order #$orderId → $new");
+    return true;
 }
 
 function restock_order(int $orderId): void

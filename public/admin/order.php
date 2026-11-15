@@ -9,19 +9,29 @@ if (!$o) {
     redirect('admin/orders.php');
 }
 
+$closed = in_array($o['status'], CLOSED_STATUSES, true);
+// Once a courier is assigned, the rider marks pickup and delivery from their portal. Only an admin can override.
+$courierHandles = fn(string $to) => in_array($to, ['out_for_delivery', 'delivered'], true) && !can('refunds');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = post('action');
     $note = mb_substr(post('note'), 0, 255);
-    if ($action === 'advance' && can('order_status')) {
+    if ($closed) {
+        flash('error', 'This order is already ' . strtolower(status_label($o['status'])) . ', so it can’t be changed.');
+    } elseif ($action === 'advance' && can('order_status')) {
         $to = post('to');
         if (!in_array($to, ORDER_FLOW[$o['status']] ?? [], true)) {
             flash('error', 'That status change is not allowed.');
+        } elseif ($courierHandles($to)) {
+            flash('error', 'The assigned courier marks pickup and delivery from the courier portal.');
         } elseif ($to === 'out_for_delivery' && !$o['courier_id']) {
             flash('error', 'Assign a courier before sending the order out.');
         } else {
             set_order_status($id, $to, $note);
             flash('success', 'Order moved to ' . status_label($to) . '. The customer was emailed.');
         }
+    } elseif ($action === 'assign' && can('assign_courier') && $o['status'] === 'out_for_delivery') {
+        flash('error', 'The order is already on the way, so the courier can’t be changed.');
     } elseif ($action === 'assign' && can('assign_courier')) {
         $cid = int_param($_POST, 'courier_id');
         if ($cid === 0 || q_val("SELECT id FROM users WHERE id=? AND role='courier' AND is_active=1", [$cid])) {
@@ -94,8 +104,18 @@ require ROOT . '/includes/layout/admin_header.php';
 
   <div class="panel">
     <h3>Fulfilment</h3>
-    <?php $next = ORDER_FLOW[$o['status']] ?? []; ?>
-    <?php if ($next && can('order_status')): ?>
+    <?php
+      $next = array_values(array_filter(ORDER_FLOW[$o['status']] ?? [], fn($to) => !$courierHandles($to)));
+      $courierName = $o['courier_id'] ? q_val('SELECT name FROM users WHERE id = ?', [$o['courier_id']]) : null;
+    ?>
+    <?php if ($closed): ?>
+      <p class="closed-note"><?= icon('check', 18) ?><span>This order is <strong><?= e(strtolower(status_label($o['status']))) ?></strong> and closed. Its status can’t be changed anymore<?= $o['status'] === 'delivered' ? '; returns are handled under Returns &amp; refunds' : '' ?>.</span></p>
+    <?php elseif (!$next && in_array($o['status'], ['packed', 'out_for_delivery'], true)): ?>
+      <p class="closed-note"><?= icon('truck', 18) ?><span><?= $courierName
+          ? 'Waiting for <strong>' . e($courierName) . '</strong> to ' . ($o['status'] === 'packed' ? 'pick up' : 'deliver') . ' this order.'
+          : 'Packed and ready. Assign a courier below.' ?></span></p>
+    <?php endif; ?>
+    <?php if (!$closed && $next && can('order_status')): ?>
       <form class="stack" method="post">
         <?= csrf_field() ?><input type="hidden" name="id" value="<?= $id ?>"><input type="hidden" name="action" value="advance">
         <label>Note to history (optional)<input name="note" maxlength="255"></label>
@@ -103,11 +123,9 @@ require ROOT . '/includes/layout/admin_header.php';
           <button class="btn btn-dark" type="submit" name="to" value="<?= e($to) ?>">Mark as <?= e(strtolower(status_label($to))) ?></button>
         <?php endforeach; ?>
       </form>
-    <?php else: ?>
-      <p class="muted">No further status changes for this order.</p>
     <?php endif; ?>
 
-    <?php if (can('assign_courier') && !in_array($o['status'], ['delivered', 'cancelled', 'returned'], true)): ?>
+    <?php if (can('assign_courier') && in_array($o['status'], ['pending', 'confirmed', 'preparing', 'packed'], true)): ?>
       <form class="inline-form" method="post">
         <?= csrf_field() ?><input type="hidden" name="id" value="<?= $id ?>"><input type="hidden" name="action" value="assign">
         <label class="grow">Courier

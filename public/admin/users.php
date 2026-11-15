@@ -3,7 +3,7 @@ require __DIR__ . '/../../includes/bootstrap.php';
 $me = require_perm('users');
 $roles = [
     'admin'       => 'Admin — everything, incl. refunds, coupons and staff',
-    'staff'       => 'Staff — products, orders, returns, analytics',
+    'staff'       => 'Staff — products, orders, returns, best-sellers (no sales or revenue)',
     'fulfillment' => 'Fulfillment — order queue and couriers only',
     'courier'     => 'Courier — only their assigned deliveries',
 ];

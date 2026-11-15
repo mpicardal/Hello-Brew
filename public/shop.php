@@ -103,17 +103,25 @@ require ROOT . '/includes/layout/header.php';
         <p class="kicker"><?= icon('shop', 14) ?> Shop by category</p>
         <h2 id="cat-title">Browse by Category</h2>
       </div>
+      <?php
+        // Arrows step through the categories (Everything → each category → back to Everything).
+        $catSlugs = array_merge([''], array_column($categories, 'slug'));
+        $pos = array_search($catSlug, $catSlugs, true);
+        $pos = $pos === false ? 0 : $pos;
+        $prevSlug = $catSlugs[($pos - 1 + count($catSlugs)) % count($catSlugs)];
+        $nextSlug = $catSlugs[($pos + 1) % count($catSlugs)];
+      ?>
       <div class="arrows">
-        <button type="button" class="round-btn" data-scroll="-1" aria-label="Scroll categories left"><?= icon('arrow-l', 18) ?></button>
-        <button type="button" class="round-btn" data-scroll="1" aria-label="Scroll categories right"><?= icon('arrow-r', 18) ?></button>
+        <a class="round-btn" href="<?= shop_link(['cat' => $prevSlug, 'page' => '']) ?>#cat-title" aria-label="Previous category"><?= icon('arrow-l', 18) ?></a>
+        <a class="round-btn" href="<?= shop_link(['cat' => $nextSlug, 'page' => '']) ?>#cat-title" aria-label="Next category"><?= icon('arrow-r', 18) ?></a>
       </div>
     </div>
     <div class="cat-row" data-scroller>
-      <a class="cat-card<?= $catSlug === '' ? ' is-active' : '' ?>" href="<?= shop_link(['cat' => '', 'page' => '']) ?>">
+      <a class="cat-card<?= $catSlug === '' ? ' is-active' : '' ?>" href="<?= shop_link(['cat' => '', 'page' => '']) ?>#cat-title"<?= $catSlug === '' ? ' aria-current="true"' : '' ?>>
         <span class="cat-icon"><?= icon('list', 30) ?></span><strong>Everything</strong><small><?= array_sum(array_column($categories, 'items')) ?> items</small>
       </a>
       <?php foreach ($categories as $c): ?>
-        <a class="cat-card<?= $catSlug === $c['slug'] ? ' is-active' : '' ?>" href="<?= shop_link(['cat' => $c['slug'], 'page' => '']) ?>">
+        <a class="cat-card<?= $catSlug === $c['slug'] ? ' is-active' : '' ?>" href="<?= shop_link(['cat' => $c['slug'], 'page' => '']) ?>#cat-title"<?= $catSlug === $c['slug'] ? ' aria-current="true"' : '' ?>>
           <span class="cat-icon"><?= icon($c['icon'], 30) ?></span><strong><?= e($c['name']) ?></strong><small><?= (int) $c['items'] ?> items</small>
         </a>
       <?php endforeach; ?>

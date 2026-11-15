@@ -7,7 +7,8 @@ declare(strict_types=1);
  */
 const PERMISSIONS = [
     'portal'         => ['admin', 'staff', 'fulfillment'],
-    'analytics'      => ['admin', 'staff'],
+    'analytics'      => ['admin'],                // sales, revenue, refunds, CSV export: owner/admin only
+    'insights'       => ['admin', 'staff'],       // best-sellers by units and top searches (no money)
     'products'       => ['admin', 'staff'],
     'categories'     => ['admin', 'staff'],
     'coupons'        => ['admin'],
