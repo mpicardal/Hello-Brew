@@ -21,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add') {
         $pid = int_param($_POST, 'product_id');
         $vid = int_param($_POST, 'variant_id');
-        if ($vid === 0) {   // default to the first option when adding from a listing
-            $vid = (int) (q_val('SELECT id FROM product_variants WHERE product_id=? AND is_archived=0 ORDER BY price_delta, id LIMIT 1', [$pid]) ?? 0);
+        if ($vid === 0) {   // no option chosen (added from a listing): use the default one
+            $vid = default_variant_id($pid);
         }
         $qty = int_param($_POST, 'qty', 1);
         if (cart_add($pid, $vid, $qty)) {
@@ -31,7 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             flash('error', 'That item is not available right now.');
         }
-        redirect(back_target());
+        // "Order Now" goes straight to the cart; the menu's cart button returns to the same product card.
+        if (post('go') === 'cart') {
+            redirect('cart.php');
+        }
+        $anchor = post('anchor');
+        redirect(back_target() . (preg_match('/^p-\d+$/', $anchor) ? '#' . $anchor : ''));
     }
     if ($action === 'update') {
         foreach ((array) ($_POST['qty'] ?? []) as $key => $qty) {

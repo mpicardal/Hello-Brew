@@ -113,6 +113,18 @@
     sync();
   }
 
+  // After adding from the menu we land back on the product card, so show the message as a pop-up there
+  const flashWrap = $('.flash-wrap');
+  if (/^#p-\d+$/.test(location.hash)) {
+    const card = document.getElementById(location.hash.slice(1));   // land on the card instantly, no glide from the top
+    if (card) window.scrollTo({ top: card.getBoundingClientRect().top + window.scrollY - 24, behavior: 'instant' });
+  }
+  if (flashWrap && /^#p-\d+$/.test(location.hash)) {
+    flashWrap.classList.add('as-toast');
+    setTimeout(() => flashWrap.classList.add('is-hiding'), 3500);
+    setTimeout(() => flashWrap.remove(), 4000);
+  }
+
   // Confirm destructive actions
   $$('form[data-confirm]').forEach(f => f.addEventListener('submit', e => {
     if (!window.confirm(f.dataset.confirm)) e.preventDefault();

@@ -98,6 +98,7 @@ require ROOT . '/includes/layout/header.php';
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="add">
             <input type="hidden" name="product_id" value="<?= (int) $p['id'] ?>">
+            <input type="hidden" name="go" value="cart">
             <button class="btn btn-tan btn-block" type="submit" <?= (int) $p['stock'] < 1 ? 'disabled' : '' ?>><?= (int) $p['stock'] < 1 ? 'Sold out' : 'Order Now' ?></button>
           </form>
         </article>

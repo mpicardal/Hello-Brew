@@ -187,7 +187,7 @@ require ROOT . '/includes/layout/header.php';
       <p class="muted small"><?= $total ?> item<?= $total === 1 ? '' : 's' ?></p>
       <div class="product-grid">
         <?php foreach ($products as $p): $out = (int) $p['stock'] < 1; ?>
-          <article class="product-card">
+          <article class="product-card" id="p-<?= (int) $p['id'] ?>">
             <?php if ($out): ?><span class="pbadge pbadge-out">Sold out</span>
             <?php elseif ($p['badge'] !== ''): ?><span class="pbadge pbadge-<?= e($p['badge']) ?>"><?= e($badgeText[$p['badge']]) ?></span><?php endif; ?>
             <a class="product-img" href="<?= url('product.php?slug=' . urlencode($p['slug'])) ?>">
@@ -205,6 +205,7 @@ require ROOT . '/includes/layout/header.php';
                   <?= csrf_field() ?>
                   <input type="hidden" name="action" value="add">
                   <input type="hidden" name="product_id" value="<?= (int) $p['id'] ?>">
+                  <input type="hidden" name="anchor" value="p-<?= (int) $p['id'] ?>">
                   <button class="cart-btn" type="submit" aria-label="Add <?= e($p['name']) ?> to cart" <?= $out ? 'disabled' : '' ?>><?= icon('cart', 18) ?></button>
                 </form>
               </div>

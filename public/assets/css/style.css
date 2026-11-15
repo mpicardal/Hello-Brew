@@ -537,3 +537,6 @@ pre.mail { white-space: pre-wrap; background: var(--paper); border-radius: var(-
 }
 .side-note { margin: 0 8px; font-size: .82rem; color: rgba(255,255,255,.7); }
 .closed-note { display: flex; gap: 10px; align-items: flex-start; background: var(--paper); border-radius: var(--radius-sm); padding: 12px 14px; margin: 0 0 12px; }
+.flash-wrap.as-toast { position: fixed; top: 16px; right: 16px; left: auto; z-index: 50; width: min(360px, calc(100% - 32px)); padding: 0; margin: 0; transition: opacity .4s ease, transform .4s ease; }
+.flash-wrap.as-toast .flash { box-shadow: var(--shadow); margin: 0; }
+.flash-wrap.as-toast.is-hiding { opacity: 0; transform: translateY(-8px); }

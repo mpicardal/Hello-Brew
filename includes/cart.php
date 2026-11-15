@@ -123,3 +123,11 @@ function cart_totals(array $lines): array
         'coupon'   => $coupon,
     ];
 }
+
+/** The option picked when the customer doesn't choose one (Iced for drinks pictured iced, otherwise the cheapest). */
+function default_variant_id(int $productId): int
+{
+    $iced = in_array(q_val('SELECT slug FROM products WHERE id = ?', [$productId]), ICED_BY_DEFAULT, true);
+    return (int) (q_val('SELECT id FROM product_variants WHERE product_id = ? AND is_archived = 0
+                         ORDER BY ' . ($iced ? "(name LIKE 'Iced%') DESC, " : '') . 'price_delta, id LIMIT 1', [$productId]) ?? 0);
+}

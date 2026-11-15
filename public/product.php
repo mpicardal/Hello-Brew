@@ -14,6 +14,7 @@ if (!$p) {
 track('product_view', (int) $p['id']);
 
 $variants = q_all('SELECT * FROM product_variants WHERE product_id = ? AND is_archived = 0 ORDER BY price_delta, id', [$p['id']]);
+$defaultVariant = default_variant_id((int) $p['id']);
 $reviews = q_all('SELECT r.*, u.name FROM reviews r JOIN users u ON u.id=r.user_id WHERE r.product_id=? AND r.is_approved=1 ORDER BY r.created_at DESC LIMIT 10', [$p['id']]);
 $avg = $reviews ? array_sum(array_column($reviews, 'rating')) / count($reviews) : 0;
 $related = q_all('SELECT * FROM products WHERE category_id=? AND id<>? AND is_archived=0 ORDER BY RAND() LIMIT 4', [$p['category_id'], $p['id']]);
@@ -46,7 +47,7 @@ require ROOT . '/includes/layout/header.php';
             <legend>Choose an option</legend>
             <?php foreach ($variants as $i => $v): ?>
               <label class="variant">
-                <input type="radio" name="variant_id" value="<?= (int) $v['id'] ?>" data-delta="<?= e($v['price_delta']) ?>"<?= $i === 0 ? ' checked' : '' ?>>
+                <input type="radio" name="variant_id" value="<?= (int) $v['id'] ?>" data-delta="<?= e($v['price_delta']) ?>"<?= (int) $v['id'] === $defaultVariant ? ' checked' : '' ?>>
                 <span><?= e($v['name']) ?><?php if ((float) $v['price_delta'] != 0): ?> <small>+<?= money($v['price_delta']) ?></small><?php endif; ?></span>
               </label>
             <?php endforeach; ?>
