@@ -103,18 +103,6 @@ require ROOT . '/includes/layout/header.php';
         <p class="kicker"><?= icon('shop', 14) ?> Shop by category</p>
         <h2 id="cat-title">Browse by Category</h2>
       </div>
-      <?php
-        // Arrows step through the categories (Everything → each category → back to Everything).
-        $catSlugs = array_merge([''], array_column($categories, 'slug'));
-        $pos = array_search($catSlug, $catSlugs, true);
-        $pos = $pos === false ? 0 : $pos;
-        $prevSlug = $catSlugs[($pos - 1 + count($catSlugs)) % count($catSlugs)];
-        $nextSlug = $catSlugs[($pos + 1) % count($catSlugs)];
-      ?>
-      <div class="arrows">
-        <a class="round-btn" href="<?= shop_link(['cat' => $prevSlug, 'page' => '']) ?>#cat-title" aria-label="Previous category"><?= icon('arrow-l', 18) ?></a>
-        <a class="round-btn" href="<?= shop_link(['cat' => $nextSlug, 'page' => '']) ?>#cat-title" aria-label="Next category"><?= icon('arrow-r', 18) ?></a>
-      </div>
     </div>
     <div class="cat-row" data-scroller>
       <a class="cat-card<?= $catSlug === '' ? ' is-active' : '' ?>" href="<?= shop_link(['cat' => '', 'page' => '']) ?>#cat-title"<?= $catSlug === '' ? ' aria-current="true"' : '' ?>>
@@ -154,7 +142,7 @@ require ROOT . '/includes/layout/header.php';
         <p class="kicker"><?= icon('cup', 14) ?> Our collection</p>
         <h2 id="prod-title"><?= $qText !== '' ? 'Results for “' . e($qText) . '”' : 'Explore Our Best Sellers' ?></h2>
       </div>
-      <form class="filters" method="get" action="<?= url('shop.php') ?>#products">
+      <form class="filters" method="get" action="<?= url('shop.php') ?>#products" data-autosubmit>
         <?php if ($qText !== ''): ?><input type="hidden" name="q" value="<?= e($qText) ?>"><?php endif; ?>
         <label><span class="sr-only">Category</span>
           <select name="cat">
@@ -173,7 +161,7 @@ require ROOT . '/includes/layout/header.php';
             <?php endforeach; ?>
           </select>
         </label>
-        <button class="btn btn-dark btn-sm" type="submit">Apply</button>
+        <noscript><button class="btn btn-dark btn-sm" type="submit">Apply</button></noscript>
         <?php if ($filtering): ?><a class="btn btn-ghost btn-sm" href="<?= url('shop.php') ?>">Clear</a><?php endif; ?>
       </form>
     </div>

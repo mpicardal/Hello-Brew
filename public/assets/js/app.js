@@ -125,6 +125,25 @@
     setTimeout(() => flashWrap.remove(), 4000);
   }
 
+  // Forms that apply themselves: menu filters and cart quantities (no Apply / Update button needed)
+  $$('form[data-autosubmit]').forEach(form => {
+    let timer;
+    const submit = delay => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        form.classList.add('is-updating');
+        if (form.id === 'cart-form' && !form.querySelector('input[name=auto]')) {
+          const flag = document.createElement('input');
+          flag.type = 'hidden'; flag.name = 'auto'; flag.value = '1';
+          form.appendChild(flag);
+        }
+        form.submit();
+      }, delay);
+    };
+    form.addEventListener('change', e => submit(e.target.tagName === 'SELECT' ? 0 : 500));
+    form.addEventListener('input', e => { if (e.target.type === 'number') submit(900); });
+  });
+
   // Confirm destructive actions
   $$('form[data-confirm]').forEach(f => f.addEventListener('submit', e => {
     if (!window.confirm(f.dataset.confirm)) e.preventDefault();

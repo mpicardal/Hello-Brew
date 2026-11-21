@@ -107,13 +107,13 @@ require ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
-<section class="facilities" id="facilities" aria-labelledby="fac-title">
+<section class="facilities" id="what-we-offer" aria-labelledby="fac-title">
   <div class="container">
-    <h2 id="fac-title" class="center">Facilities</h2>
+    <h2 id="fac-title" class="center">What We Offer</h2>
     <div class="fac-grid">
-      <div class="fac-card"><?= icon('wifi', 30) ?><h3>Work-friendly seats</h3><p>Fast Wi-Fi, power outlets and quiet corners for studying or remote work.</p></div>
-      <div class="fac-card"><?= icon('truck', 30) ?><h3>Delivery to your door</h3><p>Order online and track every step, from the espresso machine to your doorstep.</p></div>
-      <div class="fac-card"><?= icon('bread', 30) ?><h3>Baked fresh daily</h3><p>Breads, cakes and sandwiches are prepared every morning in our kitchen.</p></div>
+      <div class="fac-card"><?= icon('cart', 30) ?><h3>Easy online ordering</h3><p>Browse the full menu, choose hot or iced, and pay by card, e-wallet or cash on delivery.</p></div>
+      <div class="fac-card"><?= icon('truck', 30) ?><h3>Delivery to your door</h3><p>Track every step of your order, from the espresso machine to your doorstep.</p></div>
+      <div class="fac-card"><?= icon('bread', 30) ?><h3>Baked fresh daily</h3><p>Breads, cakes and pastries are baked every morning and sent out fresh.</p></div>
     </div>
   </div>
 </section>

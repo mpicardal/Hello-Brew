@@ -42,7 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ((array) ($_POST['qty'] ?? []) as $key => $qty) {
             cart_set((string) $key, (int) $qty);
         }
-        flash('success', 'Cart updated.');
+        if (post('auto') !== '1') {   // automatic updates don't need a message every time
+            flash('success', 'Cart updated.');
+        }
     } elseif ($action === 'remove') {
         cart_set(post('key'), 0);
         flash('success', 'Item removed.');
@@ -77,7 +79,7 @@ require ROOT . '/includes/layout/header.php';
   <?php else: ?>
   <div class="cart-layout">
     <div>
-      <form id="cart-form" action="<?= url('cart.php') ?>" method="post">
+      <form id="cart-form" action="<?= url('cart.php') ?>" method="post" data-autosubmit>
         <?= csrf_field() ?>
         <input type="hidden" name="action" value="update">
         <ul class="cart-list">
@@ -100,7 +102,7 @@ require ROOT . '/includes/layout/header.php';
           <?php endforeach; ?>
         </ul>
         <div class="btn-row">
-          <button class="btn btn-tan" type="submit">Update cart</button>
+          <noscript><button class="btn btn-tan" type="submit">Update cart</button></noscript>
           <a class="btn btn-ghost" href="<?= url('shop.php') ?>">Continue shopping</a>
         </div>
       </form>

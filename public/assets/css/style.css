@@ -265,7 +265,6 @@ legend { font-family: var(--display); font-size: 1.3rem; padding: 0; margin-bott
 .dot { width: 10px; height: 10px; border-radius: var(--pill); border: 0; background: rgba(27,18,12,.2); cursor: pointer; padding: 0; transition: width .2s; }
 .dot.is-active { width: 28px; background: var(--copper); }
 .kicker { display: inline-flex; gap: 6px; align-items: center; font-size: .82rem; font-weight: 600; color: var(--copper-d); margin-bottom: 4px; }
-.arrows { display: flex; gap: 8px; }
 .cat-row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 1fr); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 12px; scrollbar-width: thin; }
 .cat-card { scroll-snap-align: start; background: #fff; border-radius: var(--radius); padding: 22px 14px; text-align: center; text-decoration: none; color: var(--espresso); display: grid; justify-items: center; gap: 4px; box-shadow: var(--shadow-sm); border: 2px solid transparent; transition: transform .15s, border-color .15s; }
 .cat-card:hover { transform: translateY(-3px); color: var(--espresso); }
@@ -540,3 +539,4 @@ pre.mail { white-space: pre-wrap; background: var(--paper); border-radius: var(-
 .flash-wrap.as-toast { position: fixed; top: 16px; right: 16px; left: auto; z-index: 50; width: min(360px, calc(100% - 32px)); padding: 0; margin: 0; transition: opacity .4s ease, transform .4s ease; }
 .flash-wrap.as-toast .flash { box-shadow: var(--shadow); margin: 0; }
 .flash-wrap.as-toast.is-hiding { opacity: 0; transform: translateY(-8px); }
+form.is-updating { opacity: .6; pointer-events: none; transition: opacity .2s; }

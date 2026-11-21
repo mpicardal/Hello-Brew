@@ -30,7 +30,7 @@
       </ul>
     </div>
     <div>
-      <h3>Opening Hours</h3>
+      <h3>Delivery Hours</h3>
       <ul class="footer-list">
         <li><?= icon('clock', 16) ?> Mon – Fri · 7:00 AM – 9:00 PM</li>
         <li><?= icon('clock', 16) ?> Sat – Sun · 8:00 AM – 10:00 PM</li>
