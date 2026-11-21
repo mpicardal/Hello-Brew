@@ -2,18 +2,75 @@
 declare(strict_types=1);
 
 /*
- * Email service (external actor). Every email is written to email_log so admins
- * can audit it. With MAIL_TRANSPORT=mail in .env it is also sent via PHP mail()
- * (configure sendmail/SMTP on the server). Default "log" is safe for local dev.
+ * Email service (external actor). Every email is saved in email_log so admins can see it.
+ * MAIL_TRANSPORT in .env decides whether it is also delivered:
+ *   log  – saved only (default, good for demos)
+ *   smtp – delivered through an SMTP account such as Gmail (see .env.example)
+ *   mail – delivered with PHP mail() (needs a mail server on the machine)
  */
+require_once __DIR__ . '/vendor/PHPMailer/Exception.php';
+require_once __DIR__ . '/vendor/PHPMailer/PHPMailer.php';
+require_once __DIR__ . '/vendor/PHPMailer/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+
+/** Demo addresses (…@hellobrew.local, …@example.com) can't receive mail, so they are only logged. */
+function is_deliverable_email(string $to): bool
+{
+    return (bool) filter_var($to, FILTER_VALIDATE_EMAIL)
+        && !preg_match('/@([a-z0-9-]+\.)*(local|localhost|example\.(com|org|net)|test|invalid)$/i', $to);
+}
+
+/** Sends through SMTP. Returns '' on success or a short error message (never the password). */
+function smtp_send(string $to, string $subject, string $body): string
+{
+    $user = trim((string) cfg('SMTP_USER', ''));
+    $pass = str_replace(' ', '', (string) cfg('SMTP_PASS', ''));   // Gmail shows app passwords in groups of 4
+    if ($user === '' || $pass === '') {
+        return 'SMTP_USER or SMTP_PASS is missing in .env';
+    }
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = (string) cfg('SMTP_HOST', 'smtp.gmail.com');
+        $mail->Port = (int) cfg('SMTP_PORT', '587');
+        $mail->SMTPAuth = true;
+        $mail->Username = $user;
+        $mail->Password = $pass;
+        $mail->SMTPSecure = $mail->Port === 465 ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Timeout = 15;
+        $mail->CharSet = PHPMailer::CHARSET_UTF8;
+        $mail->setFrom($user, APP_NAME);                       // Gmail only sends "from" the signed-in account
+        if (filter_var(CAFE_EMAIL, FILTER_VALIDATE_EMAIL) && is_deliverable_email(CAFE_EMAIL)) {
+            $mail->addReplyTo(CAFE_EMAIL, APP_NAME);
+        }
+        $mail->addAddress($to);
+        $mail->Subject = $subject;
+        $mail->Body = $body;                                   // plain text, no HTML
+        $mail->send();
+        return '';
+    } catch (Throwable $e) {
+        return $mail->ErrorInfo ?: $e->getMessage();
+    }
+}
+
 function send_mail(string $to, string $subject, string $body, string $type): void
 {
     $subject = str_replace(["\r", "\n"], ' ', $subject);   // prevent header injection
     $status = 'logged';
-    if (cfg('MAIL_TRANSPORT', 'log') === 'mail' && filter_var($to, FILTER_VALIDATE_EMAIL)) {
-        $from = str_replace(["\r", "\n"], '', (string) cfg('MAIL_FROM', CAFE_EMAIL));
-        $headers = "From: Hello Brew! <$from>\r\nContent-Type: text/plain; charset=UTF-8";
-        $status = @mail($to, $subject, $body, $headers) ? 'sent' : 'failed';
+    $transport = cfg('MAIL_TRANSPORT', 'log');
+    if ($transport !== 'log' && is_deliverable_email($to)) {
+        if ($transport === 'smtp') {
+            $error = smtp_send($to, $subject, $body);
+            $status = $error === '' ? 'sent' : 'failed';
+            if ($error !== '') {
+                error_log('[Hello Brew mail] ' . $error);
+            }
+        } elseif ($transport === 'mail') {
+            $from = str_replace(["\r", "\n"], '', (string) cfg('MAIL_FROM', CAFE_EMAIL));
+            $headers = "From: Hello Brew! <$from>\r\nContent-Type: text/plain; charset=UTF-8";
+            $status = @mail($to, $subject, $body, $headers) ? 'sent' : 'failed';
+        }
     }
     q('INSERT INTO email_log (to_email, subject, body, type, status) VALUES (?,?,?,?,?)',
         [$to, $subject, $body, $type, $status]);

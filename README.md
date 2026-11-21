@@ -2,7 +2,7 @@
 
 Order coffee, pastries and rice meals online. Customers browse, search and filter the menu, keep a cart across pages, check out with a mock payment, track every order and request cancellations/returns. Staff run the café from a role-based portal with analytics.
 
-**Stack:** PHP 8.1+ (no framework, no Composer), MySQL 8 / MariaDB 10.4+ (InnoDB, utf8mb4), plain CSS and JS.
+**Stack:** PHP 8.1+ (no framework, no Composer; PHPMailer 6.9.3 is bundled in `includes/vendor` for Gmail), MySQL 8 / MariaDB 10.4+ (InnoDB, utf8mb4), plain CSS and JS.
 
 ## Run it (VS Code terminal)
 
@@ -21,6 +21,21 @@ Open http://localhost:8000. The setup prints one login per role with a random pa
 - XAMPP Apache instead of `php -S`: put the folder in `htdocs`, set `APP_BASE=/hello-brew/public` in `.env`, open http://localhost/hello-brew/public
 
 Test cards (no real money): `4242 4242 4242 4242` succeeds, `4000 0000 0000 0002` is declined. Coupons: `HELLOBREW` (10%), `BREWBREAK` (₱50 off ₱400+).
+
+## Real emails (Gmail)
+
+By default emails are only saved in **Admin → Email log**. To really send them:
+
+1. Use a Gmail account with **2-Step Verification** on, then create an **App Password** (Google Account → Security → App passwords).
+2. Add these lines to the end of `.env` (never commit `.env`):
+   ```
+   MAIL_TRANSPORT=smtp
+   SMTP_USER=yourcafe@gmail.com
+   SMTP_PASS=abcd efgh ijkl mnop
+   ```
+3. Test it: `php database/test_email.php you@gmail.com`
+
+Demo addresses (`@hellobrew.local`, `@example.com`) are never sent to. If Gmail can't be reached, orders still go through and the email shows as *failed* in the Email log.
 
 ## Roles and what each can see
 
