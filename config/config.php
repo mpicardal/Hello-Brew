@@ -37,7 +37,7 @@ define('DELIVERY_FEE', 50.00);
 define('FREE_DELIVERY_MIN', 800.00);
 define('LOW_STOCK_THRESHOLD', 10);
 // Drinks shown iced in their photo: "Order Now" and the product page pick the Iced option first.
-const ICED_BY_DEFAULT = ['spanish-latte', 'caramel-macchiato'];
+const ICED_BY_DEFAULT = ['spanish-latte', 'caramel-macchiato', 'white-mocha'];
 define('RETURN_WINDOW_DAYS', 7);
 define('SESSION_IDLE_SECONDS', 1800);
 define('MAX_UPLOAD_BYTES', 2 * 1024 * 1024);

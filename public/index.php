@@ -2,7 +2,7 @@
 require __DIR__ . '/../includes/bootstrap.php';
 track('page_view', null, 'home');
 
-$groups = ['hot-iced-coffee' => 'coffee', 'tea-non-coffee' => 'noncoffee', 'bakery-snacks' => 'pastries', 'pasta-rice-meals' => 'meals'];
+$groups = ['hot-iced-coffee' => 'coffee', 'tea-non-coffee' => 'noncoffee', 'bakery-snacks' => 'pastries', 'pasta' => 'meals', 'rice-meals' => 'meals'];
 
 // Best sellers: by delivered/active quantity sold, topped up with featured items.
 $best = q_all("SELECT p.*, c.slug AS cat_slug, COALESCE(s.sold,0) AS sold

@@ -5,6 +5,7 @@ declare(strict_types=1);
 function icon(string $name, int $size = 20): string
 {
     $paths = [
+        'fork'     => '<path d="M7 3v6a2 2 0 0 0 4 0V3M9 3v18M17 3c-1.7 1-3 3.2-3 6s1.3 4 3 4v8"/>',
         'check'    => '<path d="M5 12.5l4.5 4.5L19 7"/>',
         'search'   => '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
         'cart'     => '<path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/>',
