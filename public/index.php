@@ -32,7 +32,10 @@ require ROOT . '/includes/layout/header.php';
   <div class="container hero-grid">
     <div class="hero-media">
       <span class="hero-ghost" aria-hidden="true">Brew</span>
-      <img src="<?= asset('img/hero-cup-hd.jpg') ?>" alt="Coffee beans splashing into a white cup of coffee" width="1250" height="1440" fetchpriority="high">
+      <picture>
+        <source srcset="<?= asset('img/hero-cup.webp') ?>" type="image/webp">
+        <img src="<?= asset('img/hero-cup-hd.png') ?>" alt="Coffee beans splashing into a white cup of coffee" width="1400" height="916" fetchpriority="high">
+      </picture>
     </div>
     <div class="hero-copy">
       <p class="eyebrow">Specialty coffee · Pastries · Rice meals</p>
