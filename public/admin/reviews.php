@@ -31,11 +31,12 @@ require ROOT . '/includes/layout/admin_header.php';
 <p class="muted small">Only customers with a delivered order can review an item. Reviews appear in the store after approval.</p>
 <div class="stack">
   <?php foreach ($rows as $r): ?>
-    <div class="panel">
+    <div class="panel review-panel">
       <div class="admin-head">
-        <h3><?= e($r['product']) ?> <?= stars((float) $r['rating']) ?></h3>
+        <h3><?= e($r['product']) ?></h3>
         <?= $r['is_approved'] ? status_badge('approved') : status_badge('pending') ?>
       </div>
+      <div class="review-stars"><?= stars((float) $r['rating']) ?></div>
       <p>“<?= e($r['comment']) ?>”</p>
       <p class="muted small"><?= e($r['name']) ?> · <?= fmt_date($r['created_at']) ?></p>
       <div class="btn-row">

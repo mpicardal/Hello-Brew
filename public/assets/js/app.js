@@ -15,6 +15,39 @@
     });
   }
 
+  // Phones: wide tables become stacked cards. Copy each column title onto its cells so CSS can show "Label: value".
+  $$('table.table:not(.no-stack)').forEach(t => {
+    const heads = $$('thead th', t).map(th => th.textContent.trim());
+    $$('tbody tr', t).forEach(tr => {
+      let col = 0;
+      $$('td', tr).forEach(td => {
+        if (td.colSpan > 1) td.classList.add('td-full');
+        else if (heads[col]) td.dataset.label = heads[col];
+        col += td.colSpan || 1;
+      });
+    });
+  });
+  const stackTables = () => $$('table.table:not(.no-stack)').forEach(t => {
+    t.classList.remove('is-stacked');
+    const box = t.parentElement;
+    if (t.scrollWidth > t.clientWidth + 1 || t.offsetWidth > box.clientWidth + 1) t.classList.add('is-stacked');
+  });
+  stackTables();
+  if (document.fonts) document.fonts.ready.then(stackTables);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(stackTables, 150); });
+
+  // Portal menu button on phones/tablets (only when there is more than one page to pick)
+  const menuBtn = $('.admin-menu-btn');
+  const side = $('.admin-side');
+  if (menuBtn && side && $$('.admin-side nav a').length > 1) {
+    menuBtn.hidden = false;
+    side.classList.add('has-menu');
+    menuBtn.addEventListener('click', () => {
+      const open = side.classList.toggle('is-open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+  }
+
   // Best-seller tabs (landing page)
   $$('.tabs [data-filter]').forEach(tab => {
     tab.addEventListener('click', () => {

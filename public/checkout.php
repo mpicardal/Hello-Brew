@@ -147,7 +147,7 @@ require ROOT . '/includes/layout/header.php';
     <?= csrf_field() ?>
     <div class="checkout-main">
       <fieldset class="card">
-        <legend>1 · Billing details</legend>
+        <legend class="sr-only">1 · Billing details</legend><h2 class="step-title" aria-hidden="true">1 · Billing details</h2>
         <div class="grid-2">
           <label>Full name<input name="billing_name" value="<?= e($old['billing_name']) ?>" required maxlength="120" autocomplete="name"><?= fe($errors, 'billing_name') ?></label>
           <label>Email<input type="email" name="billing_email" value="<?= e($old['billing_email']) ?>" required maxlength="190" autocomplete="email"><?= fe($errors, 'billing_email') ?></label>
@@ -156,7 +156,7 @@ require ROOT . '/includes/layout/header.php';
       </fieldset>
 
       <fieldset class="card">
-        <legend>2 · Delivery address</legend>
+        <legend class="sr-only">2 · Delivery address</legend><h2 class="step-title" aria-hidden="true">2 · Delivery address</h2>
         <?= fe($errors, 'address_id') ?>
         <div class="address-options">
           <?php foreach ($addresses as $a): ?>
@@ -184,7 +184,7 @@ require ROOT . '/includes/layout/header.php';
       </fieldset>
 
       <fieldset class="card">
-        <legend>3 · Payment</legend>
+        <legend class="sr-only">3 · Payment</legend><h2 class="step-title" aria-hidden="true">3 · Payment</h2>
         <p class="notice small"><?= icon('shield', 16) ?> Demo checkout — no real money is charged. Test card: 4242 4242 4242 4242, any future expiry, any 3-digit CVC. Card numbers are never stored.</p>
         <?= fe($errors, 'payment_method') ?>
         <div class="pay-options">

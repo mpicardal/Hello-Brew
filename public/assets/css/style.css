@@ -373,7 +373,7 @@ legend { font-family: var(--display); font-weight: 400; font-size: 1.6rem; paddi
 .card h2 { font-size: 1.7rem; }
 .checkout-main { display: grid; gap: 0; }
 .checkout-main .card { display: grid; gap: 14px; }
-.checkout-main .card > legend { float: left; width: 100%; margin: 0 0 4px; padding: 0; line-height: 1.3; }
+.step-title { font-size: 1.6rem; margin: 0 0 2px; }   /* checkout section titles (a heading, not a legend, so Safari can't draw it on the box edge) */
 .address-options, .pay-options { display: grid; gap: 10px; }
 .pay-options { grid-template-columns: repeat(3, 1fr); }
 .address-opt, .pay-opt { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: var(--radius-sm); cursor: pointer; font-weight: 400; background: var(--paper); }
@@ -588,10 +588,11 @@ input, select, textarea { max-width: 100%; }
 
 @media (max-width: 900px) {
   /* Account menu becomes one row of pills instead of filling the first screen. */
-  .acc-nav { padding: 12px 14px; }
-  .acc-hello { margin: 0 0 8px; font-size: .95rem; }
-  .acc-nav nav { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 8px; scrollbar-width: none; }
-  .acc-nav nav a { white-space: nowrap; padding: 8px 14px; flex: none; }
+  .acc-nav { padding: 14px; }
+  .acc-hello { margin: 0 0 6px 4px; font-size: .95rem; }
+  .acc-nav nav { display: grid; gap: 2px; margin-bottom: 6px; }   /* compact list, all links visible */
+  .acc-nav nav a { padding: 9px 14px; font-size: .95rem; }
+  .acc-nav > a, .acc-nav .link-btn { margin-left: 4px; font-size: .92rem; }
 }
 @media (max-width: 640px) {
   /* Short announcement bar */
@@ -614,7 +615,7 @@ input[type=file] { width: 100%; min-width: 0; font-size: .9rem; }   /* file pick
   .admin-side nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin: 0 -14px; padding: 0 14px 4px; }
   .admin-side nav::-webkit-scrollbar { display: none; }
   .admin-side nav a { flex: none; white-space: nowrap; padding: 8px 14px; font-size: .9rem; }
-  .admin-side nav .count { margin-left: 6px; }
+  .admin-side nav .count { margin-left: auto; }
   .admin-side-foot { display: flex; gap: 4px; margin-top: 0; padding-top: 8px; }
   .admin-side-foot a, .admin-side-foot .link-btn { width: auto !important; padding: 6px 12px; font-size: .85rem; }
 }
@@ -653,3 +654,51 @@ input[type=file] { width: 100%; min-width: 0; font-size: .9rem; }   /* file pick
   .icon-btn, .nav-signin, .nav-toggle { width: 38px; height: 38px; }
   .nav-actions { gap: 0; }
 }
+
+/* ===== Final tidy-up pass (Nov 23) ===== */
+.stack > .panel { margin: 0; }                         /* no double gap between stacked panels */
+.review-panel .admin-head { margin-bottom: 4px; flex-wrap: nowrap; }
+.review-panel .admin-head h3 { min-width: 0; }
+.review-stars { margin-bottom: 6px; }
+.admin-menu-btn { display: none; }
+.admin-menu { display: contents; }
+@media (max-width: 900px) {
+  /* Portal top bar: logo + role on one line, a Menu button that opens the page list (no sideways swiping) */
+  .admin-side { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; }
+  .admin-side .brand { order: 0; grid-column: 1; }
+  .admin-side .role-pill { grid-column: 2; justify-self: start; white-space: nowrap; }
+  .admin-side .side-note { display: none; }
+  .admin-menu-btn:not([hidden]) { grid-column: 3; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.18); border-radius: var(--pill); padding: 8px 14px; font: inherit; font-size: .9rem; cursor: pointer; }
+  .admin-side.is-open .admin-menu-btn { background: var(--latte); color: var(--espresso); }
+  .admin-menu { display: block; grid-column: 1 / -1; }
+  .admin-side.has-menu:not(.is-open) .admin-menu { display: none; }
+  .admin-side nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 4px; overflow: visible; margin: 0; padding: 0; }
+  .admin-side nav a { white-space: normal; padding: 9px 14px; }
+  .admin-side-foot { margin-top: 8px; flex-wrap: wrap; }
+}
+@media (max-width: 374px) {
+  .admin-side .brand span { display: none; }
+}
+@media (max-width: 640px) {
+  /* Filter pills wrap onto a second line instead of hiding off-screen */
+  .seg { display: flex; flex-wrap: wrap; overflow: visible; border-radius: 22px; }
+  .seg a { padding: 6px 12px; }
+}
+/* Wide tables that don't fit the screen become one card per row (app.js adds .is-stacked only when needed) */
+.table.is-stacked, .panel .table.is-stacked, .card .table.is-stacked { display: block; overflow: visible; }
+.table.is-stacked thead { display: none; }
+.table.is-stacked tbody { display: block; }
+.table.is-stacked tr { display: block; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.table.is-stacked tr:last-child { border-bottom: 0; }
+.table.is-stacked td { display: block; position: relative; padding: 5px 0 5px min(36%, 170px); min-height: 30px; border: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; }
+.table.is-stacked td::before { content: attr(data-label); position: absolute; left: 0; top: 8px; width: min(33%, 155px); font-size: .72rem; line-height: 1.3; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-weight: 600; }
+.table.is-stacked td:not([data-label]), .table.is-stacked td.td-full { padding-left: 0; padding-top: 8px; min-height: 0; }
+.is-stacked .td-full .inline-form.tight { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.is-stacked .td-full .inline-form.tight > input:not(.num):not([type=hidden]) { grid-column: 1 / -1; }
+.table.is-stacked td:not([data-label])::before, .table.is-stacked td.td-full::before { content: none; }
+.table.is-stacked td:empty { display: none; }
+.table.is-stacked td > * { min-width: 0; }
+.table.is-stacked td input, .table.is-stacked td select { width: 100% !important; }
+.table.is-stacked td .btn { margin: 2px 4px 2px 0; }
+.table.is-stacked td .inline-form, .table.is-stacked td form { margin: 0; }
+.panel .table.is-stacked tr, .card .table.is-stacked tr { padding-left: 0; padding-right: 0; }

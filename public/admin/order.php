@@ -75,7 +75,7 @@ require ROOT . '/includes/layout/admin_header.php';
 <div class="panel-grid">
   <div class="panel">
     <h3>Items</h3>
-    <table class="table compact">
+    <table class="table compact no-stack">
       <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
       <tbody>
         <?php foreach ($items as $i): ?>

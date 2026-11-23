@@ -38,7 +38,9 @@ $menu = [
   <aside class="admin-side">
     <a class="brand" href="<?= url(home_for_role($me['role'])) ?>"><img src="<?= asset('img/logo.png') ?>" alt="" width="40" height="40"><span>Hello Brew!</span></a>
     <p class="role-pill"><?= e(ucfirst($me['role'])) ?> portal</p>
+    <button class="admin-menu-btn" type="button" aria-expanded="false" aria-controls="admin-menu" hidden><?= icon('list', 18) ?> Menu</button>
     <p class="side-note">Signed in as <?= e($me['name']) ?></p>
+    <div class="admin-menu" id="admin-menu">
     <nav aria-label="Admin">
       <?php foreach ($menu as [$href, $key, $label, $ic, $perm]): if (!can($perm)) continue; ?>
         <a href="<?= url($href) ?>"<?= ($adminTab ?? '') === $key ? ' aria-current="page"' : '' ?>><?= icon($ic, 18) ?> <?= e($label) ?>
@@ -50,6 +52,7 @@ $menu = [
     <div class="admin-side-foot">
       <a href="<?= url('index.php') ?>"><?= icon('shop', 18) ?> View store</a>
       <form action="<?= url('logout.php') ?>" method="post"><?= csrf_field() ?><button class="link-btn" type="submit"><?= icon('logout', 18) ?> Sign out <?= e(explode(' ', $me['name'])[0]) ?></button></form>
+    </div>
     </div>
   </aside>
   <main class="admin-main" id="main">
