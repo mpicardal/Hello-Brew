@@ -73,6 +73,7 @@ try {
     fwrite(STDERR, "✘ Could not connect to MySQL: " . $e->getMessage() . "\n  Is MySQL running (XAMPP → Start MySQL)? Check DB_USER / DB_PASS in .env\n");
     exit(1);
 }
+$pdo->exec("SET time_zone = '" . (new DateTime())->format('P') . "'");   // same time zone as the site
 $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 $pdo->exec("USE `$dbName`");
 

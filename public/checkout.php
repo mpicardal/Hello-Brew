@@ -118,6 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors['general'] = 'Something went wrong placing your order. You have not been charged.';
         }
         if (!$errors) {
+            // Remember the mobile number for next time if the account doesn't have one yet.
+            q("UPDATE users SET phone = ? WHERE id = ? AND (phone IS NULL OR phone = '')", [clean_phone($old['billing_phone']), $me['id']]);
             email_order_event($orderId, 'confirmation');
             track('purchase', null, $orderNo);
             cart_clear();

@@ -17,6 +17,8 @@ function db(): PDO
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES   => false,   // real prepared statements
             ]);
+            // Store and compare times in the site's time zone (APP_TIMEZONE), whatever the MySQL server uses.
+            $pdo->exec("SET time_zone = '" . (new DateTime())->format('P') . "'");
         } catch (PDOException $e) {
             error_log('DB connection failed: ' . $e->getMessage());
             http_response_code(503);
