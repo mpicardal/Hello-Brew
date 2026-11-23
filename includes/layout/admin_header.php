@@ -12,6 +12,7 @@ $menu = [
     ['admin/categories.php', 'categories', 'Categories', 'list', 'categories'],
     ['admin/coupons.php', 'coupons', 'Coupons', 'tag', 'coupons'],
     ['admin/customers.php', 'customers', 'Customers', 'users', 'customers'],
+    ['admin/subscribers.php', 'subscribers', 'Subscribers', 'mail', 'customers'],
     ['admin/reviews.php', 'reviews', 'Reviews', 'star', 'reviews'],
     ['admin/users.php', 'users', 'Staff & roles', 'shield', 'users'],
     ['admin/emails.php', 'emails', 'Email log', 'mail', 'emails'],

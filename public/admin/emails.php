@@ -3,7 +3,7 @@ require __DIR__ . '/../../includes/bootstrap.php';
 require_perm('emails');
 
 $type = get('type');
-$types = ['confirmation', 'status', 'cancelled', 'refund', 'return_update'];
+$types = ['confirmation', 'status', 'cancelled', 'refund', 'return_update', 'newsletter'];
 $rows = in_array($type, $types, true)
     ? q_all('SELECT * FROM email_log WHERE type = ? ORDER BY id DESC LIMIT 100', [$type])
     : q_all('SELECT * FROM email_log ORDER BY id DESC LIMIT 100');

@@ -1,17 +1,22 @@
 </main>
 
-<section class="newsletter" aria-labelledby="nl-title">
+<section class="newsletter" id="newsletter" aria-labelledby="nl-title">
   <div class="container newsletter-card">
     <div>
       <h2 id="nl-title">Stay up to date on all news and offers.</h2>
       <p>Be the first to know about new drinks, seasonal pastries and what's brewing in our kitchen.</p>
     </div>
+    <?php $nlMsg = $_SESSION['nl_msg'] ?? null; unset($_SESSION['nl_msg']); ?>
+    <div class="nl-box">
     <form class="nl-form" action="<?= url('subscribe.php') ?>" method="post">
       <?= csrf_field() ?>
+      <input type="hidden" name="back" value="<?= e(substr((string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), strlen(APP_BASE)) . (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] !== '' ? '?' . $_SERVER['QUERY_STRING'] : '')) ?>">
       <label class="sr-only" for="nl-email">Email address</label>
       <input id="nl-email" type="email" name="email" placeholder="Enter your email address" required maxlength="190">
       <button class="btn btn-dark" type="submit">Subscribe <?= icon('arrow-r', 18) ?></button>
     </form>
+    <?php if ($nlMsg): ?><p class="nl-msg nl-<?= $nlMsg[0] === 'ok' ? 'ok' : 'err' ?>" role="status"><?= e($nlMsg[1]) ?></p><?php endif; ?>
+    </div>
   </div>
 </section>
 
@@ -38,7 +43,6 @@
       </ul>
     </div>
     <div>
-      <img class="footer-photo" src="<?= asset('img/beans-sack.jpg') ?>" alt="A cup of coffee beside a sack of roasted beans" width="258" height="177">
       <h3>Follow Us</h3>
       <div class="socials">
         <a href="#" aria-label="Facebook"><?= icon('facebook', 18) ?></a>
