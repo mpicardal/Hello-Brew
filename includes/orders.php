@@ -28,12 +28,9 @@ function set_order_status(int $orderId, string $new, string $note = ''): bool
         q('INSERT INTO payments (order_id, kind, method, amount, status, reference) VALUES (?,?,?,?,?,?)',
             [$orderId, 'charge', 'cod', $o['total'], 'success', 'COD-' . strtoupper(bin2hex(random_bytes(4)))]);
     }
-    $extra = match ($new) {
-        'out_for_delivery' => 'Your rider is on the way! Please keep your phone nearby.',
-        'delivered'        => 'Enjoy your order! You can leave a review from your order page.',
-        default            => '',
-    };
-    email_order_event($orderId, 'status', $extra);
+    // Shipping update email. Rider notes (e.g. "ETA 20 mins") are shared; other staff notes stay internal.
+    $riderNote = (current_user()['role'] ?? '') === 'courier' && !in_array($note, ['Picked up by rider', 'Delivered by rider'], true) ? $note : '';
+    email_order_event($orderId, 'status', $riderNote);
     audit('order_status', "order #$orderId → $new");
     return true;
 }

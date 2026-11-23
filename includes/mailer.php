@@ -92,26 +92,61 @@ function order_summary_text(int $orderId): string
         . 'Total:    ' . money($o['total']) . "\n";
 }
 
+/** "Shipping update" lines: where the order is now and what happens next. */
+function shipping_update_text(array $o, string $riderNote): array
+{
+    $no = $o['order_no'];
+    $address = trim($o['ship_line1'] . ($o['ship_line2'] ? ', ' . $o['ship_line2'] : '') . ', ' . $o['ship_city']);
+    $cod = $o['payment_method'] === 'cod' && $o['payment_status'] === 'unpaid'
+        ? 'Please prepare ' . money($o['total']) . ' in cash for the rider.' : 'Your order is already paid.';
+    $rider = $o['courier_id'] ? (string) q_val('SELECT name FROM users WHERE id = ?', [$o['courier_id']]) : '';
+    $riderFirst = $rider !== '' ? explode(' ', $rider)[0] : 'Our rider';
+    $note = $riderNote !== '' ? "\nNote from {$riderFirst}: $riderNote" : '';
+    return match ($o['status']) {
+        'confirmed' => ["Order $no is confirmed",
+            "Good news! We've confirmed your order and it's in the queue.\n\nWhat's next: we'll start preparing it shortly and email you at every step."],
+        'preparing' => ["Order $no is being prepared",
+            "Our baristas and kitchen are now preparing your order.\n\nWhat's next: once it's packed, a rider will pick it up."],
+        'packed' => ["Order $no is packed and ready",
+            "Your order is packed and waiting for {$riderFirst} to pick it up.\n\nWhat's next: we'll email you as soon as it's on the way."],
+        'out_for_delivery' => ["Order $no is on the way!",
+            "Your order has left the café and {$riderFirst} is on the way to:\n  $address\n\nPlease keep your phone nearby. $cod$note"],
+        'delivered' => ["Order $no has been delivered",
+            "Your order was delivered to $address. Enjoy!$note\n\nLoved it? You can rate the items from your order page."],
+        'returned' => ["Order $no has been returned",
+            "We've received the returned items for your order."],
+        default => ["Update on order $no", 'Your order status is now: ' . status_label($o['status']) . '.'],
+    };
+}
+
 function email_order_event(int $orderId, string $event, string $extra = ''): void
 {
-    $o = q_one('SELECT id, order_no, billing_name, billing_email, status FROM orders WHERE id = ?', [$orderId]);
+    $o = q_one('SELECT * FROM orders WHERE id = ?', [$orderId]);
     if (!$o) {
         return;
     }
     $hi = "Hi {$o['billing_name']},\n\n";
-    $sign = "\n\nTrack your order any time from your Hello Brew! account.\n— The Hello Brew! team";
+    $track = rtrim((string) cfg('APP_URL', 'http://localhost:8000'), '/') . '/account/order.php?no=' . rawurlencode($o['order_no']);
+    $sign = "\n\nTrack your order: $track\n\n— The Hello Brew! team";
     switch ($event) {
         case 'confirmation':
             $subject = "Order {$o['order_no']} received — thank you!";
-            $body = $hi . "We've received your order and the baristas are on it.\n\n" . order_summary_text($orderId);
+            $body = $hi . "We've received your order and the baristas are on it.\n\n" . order_summary_text($orderId)
+                . "\nDelivering to: {$o['ship_recipient']}, {$o['ship_line1']}, {$o['ship_city']}"
+                . "\nPayment: " . payment_label($o['payment_method']);
             break;
-        case 'status':
-            $subject = "Order {$o['order_no']} is now " . strtolower(status_label($o['status']));
-            $body = $hi . 'Your order status changed to: ' . status_label($o['status']) . '.' . ($extra ? "\n\n$extra" : '');
+        case 'status':   // shipping updates
+            [$subject, $text] = shipping_update_text($o, $extra);
+            $body = $hi . $text;
             break;
         case 'cancelled':
+            $paid = in_array($o['payment_status'], ['paid', 'partially_refunded', 'refunded'], true);
             $subject = "Order {$o['order_no']} has been cancelled";
-            $body = $hi . "Your order has been cancelled.\n" . $extra;
+            $body = $hi . "Your order {$o['order_no']} has been cancelled." . ($extra ? "\n$extra" : '') . "\n\n"
+                . order_summary_text($orderId) . "\n"
+                . ($paid ? 'Refund: the full amount of ' . money($o['total']) . " is being returned to your original payment method. You'll get a separate email with the refund reference."
+                         : 'Payment: nothing was charged, so there is nothing to refund.')
+                . "\n\nThe items have been put back in stock. We hope to serve you again soon!";
             break;
         case 'refund':
             $subject = "Refund processed for order {$o['order_no']}";
