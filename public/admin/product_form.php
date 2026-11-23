@@ -109,7 +109,7 @@ require ROOT . '/includes/layout/admin_header.php';
   <div class="panel">
     <h3>Variants &amp; options</h3>
     <p class="muted small">E.g. “Iced · Regular” +₱0 or “Large” +₱20. Customers pick one on the product page.</p>
-    <table class="table compact no-stack">
+    <table class="table compact">
       <thead><tr><th>Option</th><th>Price change</th><th>Final price</th><th></th></tr></thead>
       <tbody>
         <?php foreach ($variants as $v): ?>

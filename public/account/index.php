@@ -25,17 +25,17 @@ require ROOT . '/includes/layout/header.php';
       <div class="empty"><p>No orders yet.</p><a class="btn btn-dark" href="<?= url('shop.php') ?>">Start your first order</a></div>
     <?php else: ?>
       <div class="table-wrap">
-        <table class="table">
+        <table class="table orders-table">
           <thead><tr><th>Order</th><th>Purchased</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead>
           <tbody>
           <?php foreach ($orders as $o): ?>
             <tr>
-              <td><strong><?= e($o['order_no']) ?></strong></td>
-              <td><?= fmt_date($o['created_at']) ?></td>
-              <td><?= (int) $o['items'] ?></td>
-              <td><?= money($o['total']) ?></td>
-              <td><?= status_badge($o['status']) ?></td>
-              <td><a class="btn btn-tan btn-sm" href="<?= url('account/order.php?no=' . urlencode($o['order_no'])) ?>">View</a></td>
+              <td class="ot-no"><strong><?= e($o['order_no']) ?></strong></td>
+              <td class="ot-date"><?= fmt_date($o['created_at']) ?></td>
+              <td class="ot-items"><?= (int) $o['items'] ?></td>
+              <td class="ot-total"><?= money($o['total']) ?></td>
+              <td class="ot-status"><?= status_badge($o['status']) ?></td>
+              <td class="ot-view"><a class="btn btn-tan btn-sm" href="<?= url('account/order.php?no=' . urlencode($o['order_no'])) ?>">View</a></td>
             </tr>
           <?php endforeach; ?>
           </tbody>

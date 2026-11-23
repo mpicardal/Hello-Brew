@@ -37,7 +37,7 @@ require ROOT . '/includes/layout/admin_header.php';
   <button class="btn btn-dark btn-sm" type="submit">Filter</button>
 </form>
 <div class="table-wrap">
-  <table class="table">
+  <table class="table admin-orders">
     <thead><tr><th>Order</th><th>Placed</th><th>Customer</th><th>City</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Courier</th></tr></thead>
     <tbody>
       <?php foreach ($orders as $o): ?>

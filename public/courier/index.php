@@ -66,7 +66,7 @@ require ROOT . '/includes/layout/admin_header.php';
 <div class="panel">
   <h3>Recently delivered</h3>
   <ul class="plain-list">
-    <?php foreach ($done as $d): ?><li><span><?= e($d['order_no']) ?> · <?= e($d['ship_city']) ?></span><span class="muted small"><?= fmt_date($d['created_at']) ?></span></li><?php endforeach; ?>
+    <?php foreach ($done as $d): ?><li><span><strong><?= e($d['order_no']) ?></strong><br><span class="muted small"><?= e($d['ship_city']) ?></span></span><span class="muted small nowrap"><?= fmt_date($d['created_at'], 'M j, g:i A') ?></span></li><?php endforeach; ?>
     <?php if (!$done): ?><li class="muted">Nothing yet.</li><?php endif; ?>
   </ul>
 </div>

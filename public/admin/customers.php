@@ -68,7 +68,7 @@ if ($id) {
     </div>
     <div class="panel">
       <h3>Order history</h3>
-      <table class="table compact">
+      <table class="table compact cust-orders">
         <thead><tr><th>Order</th><th>Date</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
         <tbody>
           <?php foreach ($orders as $o): ?>
@@ -111,7 +111,7 @@ require ROOT . '/includes/layout/admin_header.php';
   <button class="btn btn-dark btn-sm" type="submit">Search</button>
 </form>
 <div class="table-wrap">
-  <table class="table">
+  <table class="table customers-list">
     <thead><tr><th>Customer</th><th>Email</th><th>Joined</th><th>Orders</th><th>Spent</th><th>Last order</th><th>Status</th></tr></thead>
     <tbody>
     <?php foreach ($rows as $r): ?>

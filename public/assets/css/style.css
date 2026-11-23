@@ -699,6 +699,131 @@ input[type=file] { width: 100%; min-width: 0; font-size: .9rem; }   /* file pick
 .table.is-stacked td:empty { display: none; }
 .table.is-stacked td > * { min-width: 0; }
 .table.is-stacked td input, .table.is-stacked td select { width: 100% !important; }
+.table.is-stacked td .inline-form.tight:not(.td-full .inline-form) { flex-wrap: nowrap; }
+.table.is-stacked td:not(.td-full) .inline-form.tight input { width: auto !important; flex: 1 1 auto; max-width: 140px; }
 .table.is-stacked td .btn { margin: 2px 4px 2px 0; }
 .table.is-stacked td .inline-form, .table.is-stacked td form { margin: 0; }
 .panel .table.is-stacked tr, .card .table.is-stacked tr { padding-left: 0; padding-right: 0; }
+
+/* Products & stock on small screens: one tidy card per product */
+.products-table.is-stacked tr { display: grid; grid-template-columns: 52px repeat(3, minmax(0, 1fr)); column-gap: 12px; row-gap: 6px;
+  grid-template-areas: "img name name name" "img cat cat cat" "price price var stock" "adj adj adj adj" "act act act act"; }
+.products-table.is-stacked td { overflow-wrap: normal; }
+.products-table.is-stacked td { padding: 0; min-height: 0; }
+.products-table.is-stacked td::before { position: static; display: block; width: auto; margin-bottom: 2px; font-size: .68rem; }
+.products-table.is-stacked .pt-img { grid-area: img; }
+.products-table.is-stacked .pt-img .thumb { width: 52px; height: 52px; }
+.products-table.is-stacked .pt-name { grid-area: name; align-self: end; }
+.products-table.is-stacked .pt-cat { grid-area: cat; color: var(--ink-soft); font-size: .88rem; }
+.products-table.is-stacked .pt-name::before, .products-table.is-stacked .pt-cat::before, .products-table.is-stacked .pt-img::before { content: none; }
+.products-table.is-stacked .pt-price { grid-area: price; margin-top: 6px; }
+.products-table.is-stacked .pt-var { grid-area: var; margin-top: 6px; }
+.products-table.is-stacked .pt-stock { grid-area: stock; margin-top: 6px; }
+.products-table.is-stacked .pt-adj { grid-area: adj; display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.products-table.is-stacked .pt-adj::before { margin: 0; white-space: nowrap; }
+.products-table.is-stacked .pt-adj .inline-form { flex: 1; }
+.products-table.is-stacked .pt-act { grid-area: act; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+.products-table.is-stacked .pt-act .btn { margin: 0; }
+.products-table.is-stacked tr > td.td-full { grid-column: 1 / -1; }
+/* Portal pages that are shorter than the screen: don't stretch the top bar */
+@media (max-width: 900px) {
+  .admin { grid-template-rows: auto 1fr; align-content: start; }
+  .admin-side { align-content: start; }
+  .admin-side .role-pill { align-self: center; }
+}
+.panel > :last-child, .card > :last-child { margin-bottom: 0; }
+@media (max-width: 640px) {
+  /* Search + filter bars: search on its own line, filters share the next one */
+  .toolbar input, .toolbar select { min-width: 0; flex: 1 1 120px; width: auto !important; }
+  .toolbar input[type=search] { flex-basis: 100%; }
+  .toolbar .btn { flex: none; }
+}
+
+/* My orders on small screens: order no + status on top, then date, items, total */
+.orders-table.is-stacked tr { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; row-gap: 4px;
+  grid-template-areas: "no status" "date date" "items total" "view view"; }
+.orders-table.is-stacked td { padding: 0; min-height: 0; }
+.orders-table.is-stacked td::before { content: none; }
+.orders-table.is-stacked .ot-no { grid-area: no; align-self: center; }
+.orders-table.is-stacked .ot-status { grid-area: status; align-self: center; }
+.orders-table.is-stacked .ot-date { grid-area: date; color: var(--ink-soft); font-size: .88rem; }
+.orders-table.is-stacked .ot-items { grid-area: items; color: var(--ink-soft); font-size: .88rem; }
+.orders-table.is-stacked .ot-items::after { content: " item(s)"; }
+.orders-table.is-stacked .ot-total { grid-area: total; font-weight: 700; text-align: right !important; }
+.orders-table.is-stacked .ot-view { grid-area: view; padding-top: 6px; }
+.orders-table.is-stacked .ot-view .btn { margin: 0; }
+@media (max-width: 640px) {
+  .stat-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-row .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .stat { padding: 14px 16px; }
+  .stat strong { font-size: 1.45rem; }
+  /* Menu filters: tidy 2 x 2 grid (category, sort / min, max) */
+  .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+  .filters label { order: 3; min-width: 0; }
+  .filters label:first-of-type { order: 1; }
+  .filters label:last-of-type { order: 2; }
+  .filters select, .filters input, .filters input[type=number] { width: 100% !important; }
+  .filters > a, .filters > button { order: 4; grid-column: 1 / -1; justify-self: start; }
+}
+
+/* Compact phone cards for long lists (admin orders, customers, a customer's orders) */
+.admin-orders.is-stacked tr, .customers-list.is-stacked tr, .cust-orders.is-stacked tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 3px; }
+.admin-orders.is-stacked td, .customers-list.is-stacked td, .cust-orders.is-stacked td { padding: 0; min-height: 0; }
+.admin-orders.is-stacked td::before, .customers-list.is-stacked td::before, .cust-orders.is-stacked td::before { content: none; }
+.admin-orders.is-stacked td.td-full, .customers-list.is-stacked td.td-full, .cust-orders.is-stacked td.td-full { grid-column: 1 / -1; }
+.admin-orders.is-stacked td:nth-child(n+2), .customers-list.is-stacked td:nth-child(n+2), .cust-orders.is-stacked td:nth-child(n+2) { font-size: .88rem; color: var(--ink-soft); }
+/* admin orders: 1 no 2 placed 3 customer 4 city 5 items 6 total 7 payment 8 status 9 courier */
+.admin-orders.is-stacked tr { grid-template-areas: "no status" "cust total" "date pay" "city items" "courier courier"; }
+.admin-orders.is-stacked td:nth-child(1) { grid-area: no; }
+.admin-orders.is-stacked td:nth-child(2) { grid-area: date; }
+.admin-orders.is-stacked td:nth-child(3) { grid-area: cust; color: var(--ink) !important; font-weight: 600; }
+.admin-orders.is-stacked td:nth-child(4) { grid-area: city; }
+.admin-orders.is-stacked td:nth-child(5) { grid-area: items; text-align: right !important; }
+.admin-orders.is-stacked td:nth-child(5)::after { content: " item(s)"; }
+.admin-orders.is-stacked td:nth-child(6) { grid-area: total; text-align: right !important; color: var(--ink) !important; font-weight: 700; font-size: .95rem !important; }
+.admin-orders.is-stacked td:nth-child(7) { grid-area: pay; justify-self: end; }
+.admin-orders.is-stacked td:nth-child(8) { grid-area: status; justify-self: end; align-self: center; }
+.admin-orders.is-stacked td:nth-child(9) { grid-area: courier; }
+.admin-orders.is-stacked td:nth-child(9)::before { content: "Courier: "; position: static; display: inline; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; width: auto; }
+/* customers: 1 name 2 email 3 joined 4 orders 5 spent 6 last order 7 status */
+.customers-list.is-stacked tr { grid-template-areas: "name status" "email email" "orders spent" "joined last"; }
+.customers-list.is-stacked td:nth-child(1) { grid-area: name; }
+.customers-list.is-stacked td:nth-child(2) { grid-area: email; }
+.customers-list.is-stacked td:nth-child(3) { grid-area: joined; }
+.customers-list.is-stacked td:nth-child(3)::before { content: "Joined "; position: static; display: inline; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; width: auto; }
+.customers-list.is-stacked td:nth-child(4) { grid-area: orders; }
+.customers-list.is-stacked td:nth-child(4)::after { content: " order(s)"; }
+.customers-list.is-stacked td:nth-child(5) { grid-area: spent; text-align: right !important; color: var(--ink) !important; font-weight: 700; }
+.customers-list.is-stacked td:nth-child(6) { grid-area: last; text-align: right !important; }
+.customers-list.is-stacked td:nth-child(6)::before { content: "Last order "; position: static; display: inline; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; width: auto; }
+.customers-list.is-stacked td:nth-child(7) { grid-area: status; justify-self: end; font-size: .8rem !important; }
+/* a customer's orders: 1 no 2 date 3 total 4 payment 5 status */
+.cust-orders.is-stacked tr { grid-template-areas: "no status" "date total" "pay pay"; padding: 10px 0; }
+.cust-orders.is-stacked td:nth-child(1) { grid-area: no; }
+.cust-orders.is-stacked td:nth-child(2) { grid-area: date; }
+.cust-orders.is-stacked td:nth-child(3) { grid-area: total; text-align: right !important; color: var(--ink) !important; font-weight: 700; }
+.cust-orders.is-stacked td:nth-child(4) { grid-area: pay; }
+.cust-orders.is-stacked td:nth-child(4)::before { content: "Payment "; position: static; display: inline; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; width: auto; }
+.cust-orders.is-stacked td:nth-child(5) { grid-area: status; justify-self: end; }
+/* Small tables that always fit (order items, product options) keep full width inside panels */
+.panel .table.no-stack, .card .table.no-stack { display: table; width: 100%; }
+@media (max-width: 640px) {
+  .toolbar:not(:has(select)) input[type=search] { flex-basis: 0; flex-grow: 1; }
+}
+.panel > ul + h3, .panel > .history + h3 { margin-top: 22px; }
+/* Audit log on phones: action + time on top, who, then details */
+.audit-list.is-stacked tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 3px; grid-template-areas: "action when" "who who" "details details"; padding: 10px 16px; }
+.audit-list.is-stacked td { padding: 0; min-height: 0; }
+.audit-list.is-stacked td::before { content: none; }
+.audit-list.is-stacked td:nth-child(1) { grid-area: when; font-size: .82rem; color: var(--ink-soft); }
+.audit-list.is-stacked td:nth-child(2) { grid-area: who; font-weight: 600; }
+.audit-list.is-stacked td:nth-child(3) { grid-area: action; }
+.audit-list.is-stacked td:nth-child(4) { grid-area: details; color: var(--ink-soft); }
+.audit-list.is-stacked td.td-full { grid-column: 1 / -1; }
+@media (max-width: 640px) {
+  /* KPI tiles: an odd last tile fills the row instead of sitting alone */
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .kpis > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+@media (max-width: 340px) { .kpis { grid-template-columns: 1fr; } }
+@media (max-width: 374px) { .customers-list.is-stacked td:nth-child(3) { display: none; } }

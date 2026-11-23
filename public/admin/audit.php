@@ -9,7 +9,7 @@ require ROOT . '/includes/layout/admin_header.php';
 ?>
 <div class="admin-head"><h1>Audit log</h1><span class="muted small">Last 300 staff actions</span></div>
 <div class="table-wrap">
-  <table class="table compact">
+  <table class="table compact audit-list">
     <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Details</th></tr></thead>
     <tbody>
       <?php foreach ($rows as $r): ?>

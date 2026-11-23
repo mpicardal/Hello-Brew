@@ -59,18 +59,18 @@ require ROOT . '/includes/layout/admin_header.php';
   <button class="btn btn-dark btn-sm" type="submit">Filter</button>
 </form>
 <div class="table-wrap">
-  <table class="table">
+  <table class="table products-table">
     <thead><tr><th></th><th>Product</th><th>Category</th><th>Price</th><th>Variants</th><th>Stock</th><th>Adjust stock</th><th></th></tr></thead>
     <tbody>
     <?php foreach ($products as $p): ?>
       <tr>
-        <td><img class="thumb" src="<?= e(product_img($p['image'])) ?>" alt="" width="44" height="44"></td>
-        <td><a href="<?= url('admin/product_form.php?id=' . (int) $p['id']) ?>"><strong><?= e($p['name']) ?></strong></a><?= $p['is_featured'] ? ' <span class="badge badge-confirmed">Featured</span>' : '' ?></td>
-        <td><?= e($p['cat']) ?></td>
-        <td><?= money($p['price']) ?></td>
-        <td><?= (int) $p['variants'] ?></td>
-        <td><span class="badge <?= (int) $p['stock'] === 0 ? 'badge-cancelled' : ((int) $p['stock'] <= LOW_STOCK_THRESHOLD ? 'badge-pending' : 'badge-delivered') ?>"><?= (int) $p['stock'] ?></span></td>
-        <td>
+        <td class="pt-img"><img class="thumb" src="<?= e(product_img($p['image'])) ?>" alt="" width="44" height="44"></td>
+        <td class="pt-name"><a href="<?= url('admin/product_form.php?id=' . (int) $p['id']) ?>"><strong><?= e($p['name']) ?></strong></a><?= $p['is_featured'] ? ' <span class="badge badge-confirmed">Featured</span>' : '' ?></td>
+        <td class="pt-cat"><?= e($p['cat']) ?></td>
+        <td class="pt-price"><?= money($p['price']) ?></td>
+        <td class="pt-var"><?= (int) $p['variants'] ?></td>
+        <td class="pt-stock"><span class="badge <?= (int) $p['stock'] === 0 ? 'badge-cancelled' : ((int) $p['stock'] <= LOW_STOCK_THRESHOLD ? 'badge-pending' : 'badge-delivered') ?>"><?= (int) $p['stock'] ?></span></td>
+        <td class="pt-adj">
           <form class="inline-form tight" method="post">
             <?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $p['id'] ?>"><input type="hidden" name="action" value="stock">
             <input type="hidden" name="q" value="<?= e($search) ?>"><input type="hidden" name="cat" value="<?= $cat ?>"><input type="hidden" name="archived" value="<?= $archived ? 1 : 0 ?>">
@@ -78,7 +78,7 @@ require ROOT . '/includes/layout/admin_header.php';
             <button class="btn btn-tan btn-sm" type="submit">Apply</button>
           </form>
         </td>
-        <td class="nowrap">
+        <td class="nowrap pt-act">
           <a class="btn btn-ghost btn-sm" href="<?= url('admin/product_form.php?id=' . (int) $p['id']) ?>">Edit</a>
           <form class="inline" method="post"><?= csrf_field() ?><input type="hidden" name="id" value="<?= (int) $p['id'] ?>"><input type="hidden" name="action" value="<?= $archived ? 'restore' : 'archive' ?>"><button class="btn btn-ghost btn-sm" type="submit"><?= $archived ? 'Restore' : 'Archive' ?></button></form>
           <?php if (current_user()['role'] === 'admin'): ?>
