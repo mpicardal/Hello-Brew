@@ -548,3 +548,4 @@ pre.mail { white-space: pre-wrap; background: var(--paper); border-radius: var(-
 form.is-updating { opacity: .6; pointer-events: none; transition: opacity .2s; }
 /* Keep room for the dropdown arrow even where a section sets its own padding (menu filters, admin toolbars). */
 select:not([multiple]):not([size]) { padding-right: 42px !important; }
+.theme-dark .site-header { box-shadow: 0 1px 0 var(--espresso); }   /* hide the hairline seam above the hero on scaled (125%/150%) screens */

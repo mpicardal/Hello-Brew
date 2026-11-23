@@ -9,6 +9,7 @@ $navLinks = [
     'menu'   => ['shop.php', 'Menu'],
     'about'  => ['index.php#about', 'About Us'],
     'facil'  => ['index.php#what-we-offer', 'What We Offer'],
+    'reviews'=> ['index.php#reviews', 'Reviews'],
 ];
 ?><!doctype html>
 <html lang="en">

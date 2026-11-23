@@ -32,7 +32,7 @@ require ROOT . '/includes/layout/header.php';
   <div class="container hero-grid">
     <div class="hero-media">
       <span class="hero-ghost" aria-hidden="true">Brew</span>
-      <img src="<?= asset('img/hero-cup.png') ?>" alt="Coffee beans splashing into a white cup of coffee" width="625" height="720">
+      <img src="<?= asset('img/hero-cup-hd.jpg') ?>" alt="Coffee beans splashing into a white cup of coffee" width="1250" height="1440" fetchpriority="high">
     </div>
     <div class="hero-copy">
       <p class="eyebrow">Specialty coffee · Pastries · Rice meals</p>
@@ -118,7 +118,7 @@ require ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
-<section class="testimonials" aria-labelledby="rev-title">
+<section class="testimonials" id="reviews" aria-labelledby="rev-title">
   <div class="container">
     <h2 id="rev-title" class="center">What Our Customers Say</h2>
     <?php if ($reviews): ?>
