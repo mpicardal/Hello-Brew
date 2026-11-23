@@ -39,6 +39,10 @@ function smtp_send(string $to, string $subject, string $body): string
         $mail->Password = $pass;
         $mail->SMTPSecure = $mail->Port === 465 ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Timeout = 15;
+        // Some hosts can't reach Gmail over IPv6 and the connection just times out; use IPv4 unless SMTP_IPV6=1.
+        if (cfg('SMTP_IPV6', '0') !== '1') {
+            $mail->SMTPOptions = ['socket' => ['bindto' => '0.0.0.0:0']];
+        }
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
         $mail->setFrom($user, APP_NAME);                       // Gmail only sends "from" the signed-in account
         if (filter_var(CAFE_EMAIL, FILTER_VALIDATE_EMAIL) && is_deliverable_email(CAFE_EMAIL)) {
