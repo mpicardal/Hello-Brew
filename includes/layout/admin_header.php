@@ -28,7 +28,7 @@ $menu = [
 <link rel="icon" type="image/png" href="<?= asset('img/favicon.png') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400&family=Pixelify+Sans:wght@500..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400&family=Jersey+10&display=swap">
 <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
 <script src="<?= asset('js/app.js') ?>" defer></script>
 </head>
