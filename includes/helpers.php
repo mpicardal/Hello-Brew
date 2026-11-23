@@ -14,7 +14,10 @@ function url(string $path = ''): string
 
 function asset(string $path): string
 {
-    return url('assets/' . ltrim($path, '/'));
+    // Add the file's last-change time so phones and browsers fetch the new version after every update.
+    $path = ltrim($path, '/');
+    $file = ROOT . '/public/assets/' . $path;
+    return url('assets/' . $path) . (is_file($file) ? '?v=' . filemtime($file) : '');
 }
 
 function product_img(?string $image): string
