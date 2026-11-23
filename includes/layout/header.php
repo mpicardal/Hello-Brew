@@ -51,12 +51,17 @@ $navLinks = [
           <?= icon('cart', 22) ?><?php if (cart_count() > 0): ?><span class="count"><?= cart_count() ?></span><?php endif; ?>
         </a>
         <?php if ($me): ?>
-          <a class="nav-signin" href="<?= url(home_for_role($me['role'])) ?>"><?= icon('user', 18) ?> <?= e(explode(' ', $me['name'])[0]) ?></a>
+          <a class="nav-signin" href="<?= url(home_for_role($me['role'])) ?>" aria-label="My account (<?= e(explode(' ', $me['name'])[0]) ?>)"><?= icon('user', 18) ?> <span class="nav-signin-text"><?= e(explode(' ', $me['name'])[0]) ?></span></a>
         <?php else: ?>
-          <a class="nav-signin" href="<?= url('login.php') ?>">Sign In</a>
+          <a class="nav-signin" href="<?= url('login.php') ?>" aria-label="Sign in"><span class="nav-signin-icon"><?= icon('user', 18) ?></span><span class="nav-signin-text">Sign In</span></a>
         <?php endif; ?>
       </div>
     </nav>
+    <form class="mobile-search" action="<?= url('shop.php') ?>" method="get" role="search">
+      <label class="sr-only" for="m-q">Search the menu</label>
+      <input id="m-q" type="search" name="q" placeholder="Search coffee, pastries…" value="<?= e(get('q')) ?>" maxlength="60">
+      <button type="submit" aria-label="Search"><?= icon('search', 20) ?></button>
+    </form>
   </div>
 </header>
 <main id="main">

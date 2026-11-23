@@ -623,3 +623,33 @@ input[type=file] { width: 100%; min-width: 0; font-size: .9rem; }   /* file pick
   .tabs { gap: 2px; padding: 4px; }
   .tab { padding: 7px 11px; font-size: .88rem; }
 }
+
+/* ===== Phone header (option B + search bar below the box) ===== */
+.mobile-search { display: none; }
+.nav-signin-icon { display: none; }
+@media (max-width: 900px) {
+  .nav-box { flex-wrap: wrap; gap: 4px; padding: 8px 8px 8px 14px; border-radius: 28px; }
+  .brand { order: 1; font-size: 1.6rem; gap: 9px; }
+  .brand img { width: 38px; height: 38px; }
+  .nav-actions { order: 2; width: auto; margin-left: auto; justify-content: flex-end; gap: 2px; }
+  .nav-actions .nav-search { display: none; }
+  .icon-btn { width: 42px; height: 42px; }
+  .nav-signin { width: 42px; height: 42px; padding: 0; border: 0; border-radius: 50%; justify-content: center; }
+  .nav-signin-icon { display: contents; }
+  .nav-signin-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .nav-toggle { order: 3; margin-left: 0; width: 42px; height: 42px; display: grid; place-items: center; padding: 0; border-radius: 50%; }
+  .nav-toggle:hover { background: rgba(127,127,127,.15); }
+  .nav-links { order: 4; }
+  .mobile-search { display: flex; align-items: center; margin-top: 10px; border: 1px solid rgba(27,18,12,.3); border-radius: var(--pill); background: #fff; padding: 2px 6px 2px 18px; }
+  .theme-dark .mobile-search { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.35); color: #fff; }
+  .mobile-search input { flex: 1; border: 0 !important; background: transparent !important; box-shadow: none !important; padding: 10px 0 !important; color: inherit; min-width: 0; }
+  .mobile-search input::placeholder { color: inherit; opacity: .6; }
+  .mobile-search button { border: 0; background: transparent; color: inherit; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+}
+@media (max-width: 374px) {   /* very small phones: keep logo + 3 icons on one row */
+  .nav-box { padding: 6px 4px 6px 10px; }
+  .brand { font-size: 1.35rem; gap: 7px; }
+  .brand img { width: 32px; height: 32px; }
+  .icon-btn, .nav-signin, .nav-toggle { width: 38px; height: 38px; }
+  .nav-actions { gap: 0; }
+}
